@@ -279,12 +279,14 @@ Rectangle {
 	Video {
 		id: background
 
-		property float parallaxStrength: 0.05
+		property double parallaxStrength: 0.05
 
 		x: (-flick.contentX - flick.width / 2) * parallaxStrength
 		y: (-flick.contentY - flick.height / 2) * parallaxStrength
 		z: 0
 		scale: 1.1
+
+		playbackRate: 1 + (field_speed.value / field_speed.max)
 
 		width: parent.width
 		height: parent.height
