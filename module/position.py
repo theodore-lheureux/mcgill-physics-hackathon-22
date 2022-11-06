@@ -50,9 +50,9 @@ class Position(QObject):
         Fnetx = Fm1*math.cos(ang1) + Fm2*math.cos(ang2)
         Fnety = Fm1*math.sin(ang1) + Fm2*math.sin(ang2)
         t = 0.1/(2*math.pi)*T
-        pos_x = vx + x3
-        pos_y = vy + y3
-        print("asddsadsa", (pos_x, 1/2*((Fnetx*t)**2)))
+        pos_x = vx*1.1 - 1/2*Fnetx*1.1**2*10**12 + x3
+        pos_y = vy*1.1 - 1/2*Fnetx*1.1**2*10**12 + y3
+        print(Fnetx, Fnety)
 
         # if velocity <61:
         #     pastposx = pos_x

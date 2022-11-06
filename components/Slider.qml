@@ -8,6 +8,7 @@ RowLayout {
 	property double initial: NaN
 	property double value: slider.value
 	property string text: "<UNTITLED>"
+	property string unit: ""
 
 	Label { 
 		text: parent.text 
@@ -22,8 +23,9 @@ RowLayout {
 		to: parent.max
 		value: parent.initial
 		stepSize: 0.1
+		snapMode: Slider.SnapAlways
 
 		Layout.alignment: Qt.AlignCenter		
 	}
-	Label { text: Math.round(slider.value, 2); Layout.alignment: Qt.AlignCenter }
+	Label { text: Math.round(slider.value, 3) + " " + parent.unit; Layout.alignment: Qt.AlignCenter }
 }

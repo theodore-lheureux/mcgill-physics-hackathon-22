@@ -48,7 +48,7 @@ Rectangle {
 	}
 
 	Timer {
-		id: timer
+		id: logicTimer
 		interval: 16
 		repeat: true
 
@@ -144,6 +144,7 @@ Rectangle {
 				min: 1
 				max: 100
 				initial: 1
+				unit: "x"
 			}
 
 			Components.Slider {
@@ -152,6 +153,7 @@ Rectangle {
 				min: 50
 				max: 300
 				initial: 31
+				unit: "kg"
 			}
 
 			Components.Slider {
@@ -160,6 +162,7 @@ Rectangle {
 				min: 1
 				max: 10
 				initial: 1
+				unit: "kg"
 			}
 
 			Components.Slider {
@@ -168,6 +171,7 @@ Rectangle {
 				min: 0
 				max: 500
 				initial: 70
+				unit: "km"
 			}
 
 			ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
@@ -178,14 +182,26 @@ Rectangle {
 				min: -0.5
 				max: 0.5
 				initial: 0
+				unit: "m/s"
 			}
 
-			Components.Slider {
-				id: field_v_ang
-				text: "Angle of velocity"
-				min: 0
-				max: 2 * Math.PI
-				initial: Math.PI
+			RowLayout {
+				Label { 
+					text: "Velocity angle"
+					Layout.alignment: Qt.AlignCenter 
+					Layout.preferredWidth: 200 // dumb hack
+					clip: true 
+				}
+				Dial {
+					id: field_v_ang
+
+					from: 0
+					to: 2 * Math.PI
+					value: 0
+					stepSize: 0.1
+					snapMode: Dial.SnapAlways	
+					wrap: true
+				}
 			}
 
 			// Components.Slider {
@@ -206,6 +222,8 @@ Rectangle {
 
 			Row {
 				RoundButton {
+					Layout.alignment: Qt.AlignRight
+
 					id: aboutBtn
 
 					icon.source: "assets/about_icon.png"
@@ -298,10 +316,18 @@ Rectangle {
 				simulation.scale += wheel.angleDelta.y * 0.002
 			}
 
-			onPositionChanged: {
+			function fadeIn() {
 				simulation.opacity = 1
 				prompt1.opacity = 0
 				prompt2.opacity = 0
+			}
+
+			onPositionChanged: fadeIn()
+
+			Timer {
+				id: fadeInTimer
+				interval: 2000
+				onTriggered: flickarea.fadeIn()
 			}
 		}
 
@@ -314,7 +340,7 @@ Rectangle {
 			opacity: 0
 
 			Behavior on opacity {
-				NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
+				NumberAnimation { duration: 1000; easing.type: Easing.InOutQuad }
 			}
 
 			Rectangle {
@@ -374,7 +400,7 @@ Rectangle {
 		font.pointSize: 30
 
 		Behavior on opacity {
-			NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 1000; easing.type: Easing.InOutQuad }
 		}
 	}
 
@@ -389,7 +415,7 @@ Rectangle {
 		font.pointSize: 20
 
 		Behavior on opacity {
-			NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 1000; easing.type: Easing.InOutQuad }
 		}
 	}
 
@@ -478,7 +504,8 @@ Rectangle {
 	}
 
 	Component.onCompleted: {
-		timer.start()
+		logicTimer.start()
+		fadeInTimer.start()
 		background.play()
 	}
 }
