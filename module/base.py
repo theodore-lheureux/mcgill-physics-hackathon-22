@@ -1,11 +1,23 @@
 from PySide6.QtCore import QObject, Slot, QPointF
 from PySide6.QtQml import QmlElement
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QWidget, QMessageBox
 
 QML_IMPORT_NAME = "com.hackathon.base"
 QML_IMPORT_MAJOR_VERSION = 1
 
 @QmlElement
 class Base(QObject):
+    @Slot()
+    def about(self):
+        parent = QWidget()
+        parent.setWindowIcon(QIcon("assets/app_icon.png"))
+        QMessageBox.about(parent, "Lagrange Point Visualizer", "This is a visualizer for Lagrange points.\n\nLagrange points are points where the gravitational forces of two orbiting bodies cancel each other out.\n\nThis visualizer was created by the League of Protogens team for the 2022 McGill Physics Hackathon. Thanks to Kenneth for the cute name.\n\nAUTHORS\n- Eric Deng: Equation solving, backend programming\n- Theodore l'Heureux: Logic solving, backend and frontend programming\n- Maxime Gagnon: Frontend programming, backend porting, QA\n- Kenneth Chen: Frontend programming, QA\n- David Vo: Moral support, QA\n\nBuilt with Python and Qt Quick (QML), using Pyside6 bindings.")
+
+    @Slot()
+    def aboutQt(self):
+        QMessageBox.aboutQt(None)
+
     @Slot(float, float, float, result=list)
     def lagrange_dist(self, M1, M2, R):
         try:
