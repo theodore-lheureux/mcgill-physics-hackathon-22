@@ -27,5 +27,5 @@ RowLayout {
 
 		Layout.alignment: Qt.AlignCenter		
 	}
-	Label { text: Math.round(slider.value, 3) + " " + parent.unit; Layout.alignment: Qt.AlignCenter }
+	Label { text: slider.value.toFixed(1) + " " + parent.unit; Layout.alignment: Qt.AlignCenter }
 }

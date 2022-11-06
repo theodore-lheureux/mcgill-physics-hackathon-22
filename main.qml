@@ -4,6 +4,7 @@ import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
 import QtQuick.Window
 import QtQuick.Layouts
+import QtCharts 
 import QtMultimedia
 
 import com.hackathon.base
@@ -90,6 +91,10 @@ Rectangle {
 			let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
 			object3.x = posM3.x
 			object3.y = posM3.y 
+
+
+			//series.append(posM3.x, posM3.y)
+
 
 			angle += 0.005 * field_speed.value
 		}
@@ -179,8 +184,8 @@ Rectangle {
 			Components.Slider {
 				id: field_v
 				text: "Velocity of 3rd object"
-				min: -0.5
-				max: 0.5
+				min: -1
+				max: 1
 				initial: 0
 				unit: "m/s"
 			}
@@ -204,21 +209,9 @@ Rectangle {
 				}
 			}
 
-			// Components.Slider {
-			// 	id: field_x3
-			// 	text: "X of 3rd object"
-			// 	min: 1
-			// 	max: 100
-			// 	initial: 50
-			// }
-
-			// Components.Slider {
-			// 	id: field_y3
-			// 	text: "Y of 3rd object"
-			// 	min: 1
-			// 	max: 100
-			// 	initial: 50
-			// }
+			Label {
+				text: "Click on the canvas to set object position"
+			}
 
 			Row {
 				RoundButton {
@@ -346,10 +339,12 @@ Rectangle {
 			Rectangle {
 				id: object1
 
-				width: 10
-				height: 10
+				property double d: field_m1.value * 10 / 100
+
+				width: d
+				height: d
 				z: 2
-				radius: 10			
+				radius: 100			
 				color: "cyan"
 			}
 
@@ -383,6 +378,7 @@ Rectangle {
 				id: lagrange_points
 
 				delegate: Components.LagrangePoint {
+					visible: field_m1.value / field_m2.value > 24
 					x: modelData.x + simulation.width / 2 - width / 2
 					y: modelData.y + simulation.height / 2 - height / 2
 				}
@@ -484,7 +480,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.top: parent.top
 		color: mousearea.containsMouse ? "#300c33" : "#401f66"
-		opacity: 0.5
+		opacity: 0.8
 		radius: app.radius
 		anchors.margins: app.spacing
 		
