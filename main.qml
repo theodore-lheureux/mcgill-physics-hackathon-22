@@ -319,8 +319,9 @@ Rectangle {
 			}
 
 			onClicked: (mouse) => {
-				object3.x = mouse.x - object3.width * 2
-				object3.y = mouse.y - object3.height * 2
+				let coords = mapToItem(simulation, mouse.x - object3.width * 2, mouse.y - object3.height * 2)
+				object3.x = coords.x
+				object3.y = coords.y
 			}
 
 			function fadeIn() {
