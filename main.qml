@@ -45,12 +45,12 @@ Rectangle {
 
 			// place 2 first astres
 			let posM1 = position.pos_object(angle, barycenter.x, true)
-			object1.x = posM1.x + simulation.width / 2
-			object1.y = posM1.y + simulation.height / 2
+			object1.x = posM1.x + simulation.width / 2 - object1.width / 2
+			object1.y = posM1.y + simulation.height / 2 - object1.height / 2
 
 			let posM2 = position.pos_object(angle, barycenter.y, false)
-			object2.x = posM2.x + simulation.width / 2
-			object2.y = posM2.y + simulation.height / 2
+			object2.x = posM2.x + simulation.width / 2 - object2.width / 2
+			object2.y = posM2.y + simulation.height / 2 - object2.height / 2
 			
 			// place Lagrange pts
 			let pos_lagrange = position.pos_lagrange(lagrange_dist[0], lagrange_dist[1], lagrange_dist[2], posM2.x, posM2.y, barycenter.x, r, angle)
@@ -262,9 +262,10 @@ Rectangle {
 			Rectangle {
 				id: object1
 
-				color: "blue"
+				color: "cyan"
 				width: 10
 				height: 10
+				z: 2
 				radius: 10			
 			}
 
@@ -290,16 +291,16 @@ Rectangle {
 				width: 20
 				height: 20
 				radius: 10
-				x: simulation.width / 2
-				y: + simulation.height / 2
+				x: simulation.width / 2 - width / 2
+				y: + simulation.height / 2 - height / 2
 			}
 
 			Repeater {
 				id: lagrange_points
 
 				delegate: Components.LagrangePoint {
-					x: modelData.x + simulation.width / 2
-					y: modelData.y + simulation.height / 2
+					x: modelData.x + simulation.width / 2 - width / 2
+					y: modelData.y + simulation.height / 2 - height / 2
 				}
 			}
 		}
