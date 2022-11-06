@@ -9,7 +9,12 @@ RowLayout {
 	property double value: slider.value
 	property string text: "<UNTITLED>"
 
-	Label { text: parent.text; Layout.alignment: Qt.AlignCenter }
+	Label { 
+		text: parent.text 
+		Layout.alignment: Qt.AlignCenter 
+		Layout.preferredWidth: 200 // dumb hack
+		clip: true 
+	}
 	Slider {
 		id: slider
 

@@ -1,5 +1,7 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Controls.Material.impl
 import QtQuick.Layouts
 import QtMultimedia
 
@@ -10,7 +12,7 @@ import "./components" as Components
 
 Rectangle {
 	anchors.fill: parent
-	color: "black"
+	color: "#121212"
 
 	Base { id: base }
 	Position { id: position }
@@ -27,8 +29,8 @@ Rectangle {
 		property double m2: field_m2.value  
 		property double r: field_r.value 
 		property double speed: 1
-		property double v: field_v.value
-		property double v_ang: field_v_ang.value
+		// property double v: field_v.value
+		// property double v_ang: field_v_ang.value
 
 		property double x3: 500
 		property double y3: 500
@@ -40,6 +42,7 @@ Rectangle {
 			let barycenter = base.barycenter(m1, m2, r)
 			let lagrange_dist = base.lagrange_dist(m1, m2, r)
 			let t = base.rotation_period(m1, m2, barycenter.x, barycenter.y) * (speed)
+
 			// place 2 first astres
 			let posM1 = position.pos_object(angle, barycenter.x, true)
 			object1.x = posM1.x + simulation.width / 2
@@ -53,12 +56,10 @@ Rectangle {
 			let pos_lagrange = position.pos_lagrange(lagrange_dist[0], lagrange_dist[1], lagrange_dist[2], posM2.x, posM2.y, barycenter.x, r, angle)
 			lagrange_points.model = pos_lagrange
 
-			// Place Object 3
-			let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
-			object3.x = posM3.x
-			object3.y = posM3.y 
-
-			//console.log(posM3.x, posM3.y, simulation.width / 2, simulation.height / 2)
+			// // Place Object 3
+			// let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
+			// object3.x = posM3.x
+			// object3.y = posM3.y 
 
 			angle += 0.005 * field_speed.value
 		}
@@ -69,32 +70,36 @@ Rectangle {
 		
 		property int margin: 15
 
-		width: layout.implicitWidth + margin * 2
+		width: layout.implicitWidth + margin * 4
+		height: heading.implicitHeight + layout.implicitHeight + margin * 4
 		anchors.left: parent.left
 		anchors.top: parent.top
-		anchors.bottom: parent.bottom
 		anchors.margins: margin
 
-		Video {
-			id: background
+		property int radius: 15
+		Material.elevation: 100
+		background: Rectangle {
+			color: menu.Material.backgroundColor
+			radius: menu.Material.elevation > 0 ? menu.radius : 0
 
-			anchors.fill: parent
-			source: Qt.resolvedUrl("assets/video.mp4")
-			playbackRate: 0.4 * timer.speed
-			opacity: 0.3
-			fillMode: Image.PreserveAspectCrop
-		}
+			layer.enabled: menu.enabled && menu.Material.elevation > 0
+			layer.effect: ElevationEffect {
+				elevation: menu.Material.elevation
+			}
+		}	
 
 		Label {
 			id: heading
 
-			text: "<h1>Menu</h1>"
+			text: "Parameters"
+			font.pointSize: 30
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.right: parent.right
 			anchors.margins: menu.margin
+			anchors.leftMargin: 40 // dirty hack
 		}
-		ColumnLayout {
+		Column {
 			id: layout
 
 			anchors.top: heading.bottom
@@ -103,6 +108,14 @@ Rectangle {
 			anchors.bottom: parent.bottom
 			anchors.margins: menu.margin
 			
+			Components.Slider {
+				id: field_speed
+				text: "Simulation speed"
+				min: 1
+				max: 10
+				initial: 1
+			}
+
 			Components.Slider {
 				id: field_m1
 				text: "Mass of 1st object"
@@ -126,47 +139,96 @@ Rectangle {
 				max: 500
 				initial: 70
 			}
-			
-			Components.Slider {
-				id: field_speed
-				text: "Simulation speed"
-				min: 1
-				max: 10
-				initial: 1
-			}
 
-			Components.Slider {
-				id: field_v
-				text: "Velocity of 3rd object"
-				min: -2 * Math.PI
-				max: 2 * Math.PI
-				initial: 0
-			}
+			// BROKEN
+			// Components.Slider {
+			// 	id: field_v
+			// 	text: "Velocity of 3rd object"
+			// 	min: -2 * Math.PI
+			// 	max: 2 * Math.PI
+			// 	initial: 0
+			// }
 
-			Components.Slider {
-				id: field_v_ang
-				text: "Angle of velocity"
-				min: 0
-				max: 100
-				initial: 50
-			}
+			// Components.Slider {
+			// 	id: field_v_ang
+			// 	text: "Angle of velocity"
+			// 	min: 0
+			// 	max: 100
+			// 	initial: 50
+			// }
 
-			Components.Slider {
-				id: field_x3
-				text: "X of 3rd object"
-				min: 1
-				max: 100
-				initial: 50
-			}
+			// Components.Slider {
+			// 	id: field_x3
+			// 	text: "X of 3rd object"
+			// 	min: 1
+			// 	max: 100
+			// 	initial: 50
+			// }
 
-			Components.Slider {
-				id: field_y3
-				text: "Y of 3rd object"
-				min: 1
-				max: 100
-				initial: 50
+			// Components.Slider {
+			// 	id: field_y3
+			// 	text: "Y of 3rd object"
+			// 	min: 1
+			// 	max: 100
+			// 	initial: 50
+			// }
+		}
+
+		state: "closed"
+		states: [
+			State {
+				name: "open"
+				PropertyChanges {
+					target: menu
+					width: layout.implicitWidth + margin * 4
+					height: heading.implicitHeight + layout.implicitHeight + margin * 4
+					opacity: 1
+				}
+			},
+			State {
+				name: "closed"
+				PropertyChanges {
+					target: menu
+					width: 0
+					height: 0
+					opacity: 0
+				}
+			}
+		]
+
+		transitions: Transition {
+			NumberAnimation {
+				properties: "width, height, opacity"
+				duration: 200
+				easing.type: Easing.InOutQuad
 			}
 		}
+	}
+
+	RoundButton {
+		id: menu_toggle
+		icon.source: "assets/cog_icon_mit.png"
+		anchors.left: parent.left
+		anchors.top: parent.top
+		anchors.margins: menu.margin
+		
+		onClicked: {
+			if (menu.state == "open") {
+				menu.state = "closed"
+			} else {
+				menu.state = "open"
+			}
+		}
+	}
+
+	Video {
+		id: background
+
+		anchors.fill: parent
+		source: Qt.resolvedUrl("assets/video.mp4")
+		playbackRate: 0.4 * timer.speed
+		opacity: 0.3
+		fillMode: Image.PreserveAspectCrop
 	}
 
 	Rectangle {
@@ -174,32 +236,31 @@ Rectangle {
 
 		color: "transparent"
 
-		anchors.top: parent.top
-		anchors.bottom: parent.bottom
-		anchors.left: menu.right
-		anchors.right: parent.right
+		anchors.fill: parent
 
 		anchors.margins: 15
-		// transform: Rotation { origin.x: 25; origin.y: 25; angle: 45}
+
+		// layer.enabled: true
+		// layer.effect: ElevationEffect {
+		// 	elevation: 100
+		// }
 
 		Rectangle {
 			id: object1
 
 			color: "blue"
-			width: 5
-			height: 5
-			radius: 10
+			width: 10
+			height: 10
+			radius: 10			
 		}
 
 		Rectangle {
 			id: object2
 
 			color: "red"
-			width: 5
-			height: 5
+			width: 10
+			height: 10
 			radius: 10
-
-			
 		}
 
 		Rectangle {
@@ -219,14 +280,6 @@ Rectangle {
 				x: modelData.x + simulation.width / 2
 				y: modelData.y + simulation.height / 2
 			}
-		}
-
-		Label {
-			text: timer.speedup + "x"
-			anchors.bottom: parent.bottom
-			anchors.left: parent.left
-			anchors.right: parent.right
-			anchors.margins: menu.margin
 		}
 	}
 
