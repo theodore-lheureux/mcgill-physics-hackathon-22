@@ -70,6 +70,8 @@ Rectangle {
 		
 		property int margin: 15
 
+		z: 1
+		clip: true
 		width: layout.implicitWidth + margin * 4
 		height: heading.implicitHeight + layout.implicitHeight + margin * 4
 		anchors.left: parent.left
@@ -207,6 +209,7 @@ Rectangle {
 
 	RoundButton {
 		id: menu_toggle
+		z: 2
 		icon.source: "assets/cog_icon_mit.png"
 		anchors.left: parent.left
 		anchors.top: parent.top
@@ -224,61 +227,80 @@ Rectangle {
 	Video {
 		id: background
 
+		z: 0
+
 		anchors.fill: parent
 		source: Qt.resolvedUrl("assets/video.mp4")
-		playbackRate: 0.4 * timer.speed
 		opacity: 0.3
-		fillMode: Image.PreserveAspectCrop
+		fillMode: VideoOutput.PreserveAspectCrop
+		loops: MediaPlayer.Infinite
 	}
 
-	Rectangle {
-		id: simulation
-
-		color: "transparent"
-
+	Flickable {
+		id: flick
 		anchors.fill: parent
 
-		anchors.margins: 15
-
-		// layer.enabled: true
-		// layer.effect: ElevationEffect {
-		// 	elevation: 100
-		// }
-
-		Rectangle {
-			id: object1
-
-			color: "blue"
-			width: 10
-			height: 10
-			radius: 10			
+		contentWidth: parent.width * 2
+		contentHeight: parent.height * 2
+		contentX: parent.width / 2
+		contentY: parent.height / 2
+		
+		MouseArea {
+			anchors.fill: parent
+			onWheel: (wheel) => {
+				simulation.scale += wheel.angleDelta.y * 0.002
+			}
 		}
 
 		Rectangle {
-			id: object2
+			id: simulation
 
-			color: "red"
-			width: 10
-			height: 10
-			radius: 10
-		}
+			anchors.fill: parent
+			anchors.margins: 15
+			color: "transparent"
 
-		Rectangle {
-			id: object3
-			color: "grey"
-			width: 20
-			height: 20
-			radius: 10
-			x: simulation.width / 2
-			y: + simulation.height / 2
-		}
+			Rectangle {
+				id: object1
 
-		Repeater {
-			id: lagrange_points
+				color: "blue"
+				width: 10
+				height: 10
+				radius: 10			
+			}
 
-			delegate: Components.LagrangePoint {
-				x: modelData.x + simulation.width / 2
-				y: modelData.y + simulation.height / 2
+			Behavior on scale {
+				NumberAnimation {
+					duration: 200
+					easing.type: Easing.OutQuad
+				}
+			}
+
+			Rectangle {
+				id: object2
+
+				color: "red"
+				width: 10
+				height: 10
+				radius: 10
+			}
+
+			Rectangle {
+				id: object3
+				color: "grey"
+				width: 20
+				height: 20
+				radius: 10
+				x: simulation.width / 2
+				y: + simulation.height / 2
+			}
+
+			Repeater {
+				id: lagrange_points
+
+				delegate: Components.LagrangePoint {
+					x: modelData.x + simulation.width / 2
+					y: modelData.y + simulation.height / 2
+				}
 			}
 		}
 	}
