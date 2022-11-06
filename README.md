@@ -5,7 +5,7 @@
 - [Maxime Gagnon](https://github.com/Thurinum)
 - [Kenneth Chen](https://github.com/)
 - [David Vo](https://github.com/)
-- [Theodore l'Heureux](https://duckduckgo.com)
+- [Theodore l'Heureux](https://github.com/theodore-lheureux)
 
 <h2>Features highlights</h2>
 
