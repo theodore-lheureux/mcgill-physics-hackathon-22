@@ -19,8 +19,8 @@ class Position(QObject):
         y = bary_distance * math.sin(angle)
         return QPointF(x, y) if inverted else QPointF(-x, -y)
 
-    @Slot(float, float, float, float, float, float, float, float, result=list)
-    def pos_lagrange(self, d1, d2, d3, x1, y1, bary_distance, R, ang):
+    @Slot(float, float, float, float, float, float, float, float, float, float, result=list)
+    def pos_lagrange(self, d1, d2, d3, x1, y1, bary_distance, R, ang, m1, m2):
         L1x = d1*math.cos(ang) + x1
         L1y = d1*math.sin(ang) + y1
         L2x = d2*math.cos(ang) + x1
@@ -31,7 +31,10 @@ class Position(QObject):
         L4y = R*math.sin(ang+math.pi/3)+y1
         L5x = R*math.cos(ang-math.pi/3)+x1
         L5y = R*math.sin(ang-math.pi/3)+y1
-        return [QPointF(L1x, L1y), QPointF(L2x, L2y), QPointF(L3x, L3y), QPointF(L4x, L4y), QPointF(L5x, L5y)]
+        if m1/m2 > 24:
+            return [QPointF(L1x, L1y), QPointF(L2x, L2y), QPointF(L3x, L3y), QPointF(L4x, L4y), QPointF(L5x, L5y)]
+        else:
+            return [QPointF(L1x, L1y), QPointF(L2x, L2y), QPointF(L3x, L3y), QPointF(), QPointF()]
 
 
     @Slot(float, float, float, float, float, float, float, float, float, float, float, result=QPointF)

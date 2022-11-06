@@ -84,7 +84,7 @@ Rectangle {
 			object2.y = posM2.y + simulation.height / 2 - object2.height / 2
 			
 			// place Lagrange pts
-			let pos_lagrange = position.pos_lagrange(lagrange_dist[0], lagrange_dist[1], lagrange_dist[2], posM2.x, posM2.y, barycenter.x, r, angle)
+			let pos_lagrange = position.pos_lagrange(lagrange_dist[0], lagrange_dist[1], lagrange_dist[2], posM2.x, posM2.y, barycenter.x, r, angle, m1, m2)
 			lagrange_points.model = pos_lagrange
 
 			// Place Object 3
@@ -393,7 +393,6 @@ Rectangle {
 				id: lagrange_points
 
 				delegate: Components.LagrangePoint {
-					visible: field_m1.value / field_m2.value > 24
 					x: modelData.x + simulation.width / 2 - width / 2
 					y: modelData.y + simulation.height / 2 - height / 2
 				}
