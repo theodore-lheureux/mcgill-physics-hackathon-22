@@ -43,18 +43,22 @@ class Position(QObject):
         G = 6.67*(10**-11)
         dist_m1 = math.sqrt((y3-y1)**2+(x3-x1)**2)
         dist_m2 = math.sqrt((y3-y2)**2+(x3-x2)**2)
-        ang1 = -math.atan((y3-y1)/(x3-x1))
-        ang2 = -math.atan((y3-y2)/(x3-x2))
+        ang1 = math.atan((y1-y3)/(x1-x3))  
+        ang2 = math.atan((y2-y3)/(x2-x3))
         Fm1 = (G*M1)/(dist_m1**2)
         Fm2 = (G*M2)/(dist_m2**2)
+        Fm1x = abs((G*M1)/(dist_m1**2)) if x3-x1 < 0 else -abs((G*M1)/(dist_m1**2))
+        Fm1y = abs((G*M1)/(dist_m1**2)) if y3-y1 < 0 else -abs((G*M1)/(dist_m1**2))
+        Fm2x = abs((G*M2)/(dist_m2**2)) if x3-x2 < 0 else -abs((G*M2)/(dist_m2**2))
+        Fm2y = abs((G*M2)/(dist_m2**2)) if y3-y2 < 0 else -abs((G*M2)/(dist_m2**2))
         # Fnetx = Fm1*math.cos(ang1) + Fm2*math.cos(ang2)
         # Fnety = Fm1*math.sin(ang1) + Fm2*math.sin(ang2)
-        Fnetx = Fm1*math.cos(ang1)
-        Fnety = Fm1*math.sin(ang1)
+        Fnetx = Fm1x + Fm2x
+        Fnety = Fm1y + Fm2y
         t = 0.1/(2*math.pi)*T
         pos_x = vx*1.1 + 1/2*Fnetx*1.1**2*10**12 + x3
         pos_y = vy*1.1 + 1/2*Fnety*1.1**2*10**12 + y3
-        print(ang1)
+        
 
         # if velocity <61:
         #     pastposx = pos_x
