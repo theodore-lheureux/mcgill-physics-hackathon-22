@@ -13,7 +13,7 @@ def main():
 
     view = QQuickView()
     view.setSource(QUrl("main.qml"))
-    view.setTitle("Lagrange Points Visualizer")
+    view.setTitle("Lagrange Points")
     view.setIcon(QIcon("assets/app_icon_small.png"))
     view.setWidth(1280)
     view.setHeight(720)

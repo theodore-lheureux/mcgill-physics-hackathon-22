@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Controls.Material.impl
+import QtQuick.Window
 import QtQuick.Layouts
 import QtMultimedia
 
@@ -276,6 +277,31 @@ Rectangle {
 		}
 	}
 
+	RoundButton {
+		id: resize_toggle
+
+		z: 2
+		anchors.right: parent.right
+		anchors.bottom: parent.bottom
+		text: "R"
+
+		onPressed: {
+			Window.window.startSystemResize(Qt.BottomEdge | Qt.RightEdge)
+		}
+	}
+
+	MouseArea {
+		id: invisible_titlebar
+
+		z: 1
+		anchors.top: parent.top
+		width: parent.width
+		height: 50
+		acceptedButtons: Qt.LeftButton
+		onPressed: Window.window.startSystemMove()
+		
+	}
+
 	Video {
 		id: background
 
@@ -307,6 +333,8 @@ Rectangle {
 		contentY: parent.height / 2
 		
 		MouseArea {
+			id: flickarea
+
 			anchors.fill: parent
 			onWheel: (wheel) => {
 				simulation.scale += wheel.angleDelta.y * 0.002
@@ -319,6 +347,11 @@ Rectangle {
 			anchors.fill: parent
 			anchors.margins: 15
 			color: "transparent"
+			opacity: 0
+
+			Behavior on opacity {
+				NumberAnimation { duration: 7000; easing.type: Easing.OutQuad }
+			}
 
 			Rectangle {
 				id: object1
@@ -364,6 +397,8 @@ Rectangle {
 					y: modelData.y + simulation.height / 2 - height / 2
 				}
 			}
+
+			Component.onCompleted: simulation.opacity = 1
 		}
 	}
 
@@ -372,8 +407,7 @@ Rectangle {
 		text: "Drag or pinch to interact"
 
 		width: app.width
-		anchors.top: app.top
-		anchors.margins: app.spacing + 25
+		anchors.centerIn: parent
 		horizontalAlignment: Text.AlignHCenter
 		font.pointSize: 30
 
@@ -383,6 +417,35 @@ Rectangle {
 
 		Component.onCompleted: opacity = 0
 	}
+
+	Label {
+		id: prompt2
+		text: "Drag here to move"
+
+		width: app.width
+		anchors.top: app.top
+		anchors.margins: app.spacing + 25
+		horizontalAlignment: Text.AlignHCenter
+		font.pointSize: 20
+
+		Behavior on opacity {
+			NumberAnimation { duration: 3000; easing.type: Easing.OutQuad }
+		}
+
+		Component.onCompleted: opacity = 0
+	}
+
+	Label {
+		id: aboutTxt
+		text: "Lagrange point visualizer"
+
+		width: app.width
+		anchors.left: app.left
+		anchors.bottom: app.bottom
+		anchors.margins: app.spacing
+		font.pointSize: 14
+	}
+
 
 	Rectangle {
 		id: quitBtn
