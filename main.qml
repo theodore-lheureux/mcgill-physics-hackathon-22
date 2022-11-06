@@ -18,9 +18,33 @@ Rectangle {
 	anchors.fill: parent
 	radius: 15
 	color: "#121212"
+	opacity: 0
 
 	Base { id: base }
 	Position { id: position }
+
+	NumberAnimation {
+		target: app
+		properties: "opacity,scale"
+		from: 0
+		to: 1
+		duration: 1000
+		easing.type: Easing.InOutBack
+		running: true
+	}
+
+	NumberAnimation {
+		id: closeAnim
+
+		target: app
+		properties: "opacity,scale"
+		from: 1
+		to: 0
+		duration: 1000
+		easing.type: Easing.InOutBack
+
+		onFinished: Qt.quit()
+	}
 
 	Timer {
 		id: timer
@@ -371,7 +395,7 @@ Rectangle {
 		MouseArea {
 			anchors.fill: parent
 
-			onClicked: Qt.quit()
+			onClicked: closeAnim.start()
 		}
 	}
 

@@ -18,7 +18,8 @@ def main():
     view.setWidth(1280)
     view.setHeight(720)
     view.setColor(Qt.transparent)
-    view.setFlags(Qt.FramelessWindowHint | Qt.Window)
+    view.setModality(Qt.WindowModal)
+    view.setFlags(Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.Window)
     view.engine().quit.connect(app.quit)
     view.show()
 
