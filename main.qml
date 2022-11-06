@@ -92,13 +92,13 @@ Rectangle {
 
 			object3.visible = true
 
-			console.log(posM3)
 
 			if (posM3) {
 				object3.x = posM3.x
 				object3.y = posM3.y
 			} else {
 				object3.visible = false
+				prompt2.show("Collision detected. Click anywhere to replace object")
 			}
 
 			angle += 0.005 * field_speed.value
@@ -154,7 +154,7 @@ Rectangle {
 				min: 1
 				max: 100
 				initial: 1
-				unit: "x"
+				unit: "x (not actual time)"
 			}
 
 			Components.Slider {
@@ -424,9 +424,18 @@ Rectangle {
 		horizontalAlignment: Text.AlignHCenter
 		font.pointSize: 20
 
-		Behavior on opacity {
-			NumberAnimation { duration: 1000; easing.type: Easing.InOutQuad }
+		SequentialAnimation {
+			id: prompt2Animation
+			
+			NumberAnimation { target: prompt2; from: 0; to: 1; property: "opacity"; duration: 1000; easing.type: Easing.InOutQuad }
+			NumberAnimation { target: prompt2; from: 1; to: 1; property: "opacity"; duration: 3000; easing.type: Easing.InOutQuad }
+			NumberAnimation { target: prompt2; from: 1; to: 0; property: "opacity"; duration: 1000; easing.type: Easing.InOutQuad }
 		}
+
+		// function show(msg) {
+		// 	text = msg
+		// 	prompt2Animation.play()
+		// }
 	}
 
 	MouseArea {
