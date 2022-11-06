@@ -3,17 +3,18 @@ import module.base
 import module.position
 
 from PySide6.QtCore import QUrl
-from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtQuick import QQuickView
+from PySide6.QtWidgets import QApplication
 
 def main():
     os.environ["QT_QUICK_CONTROLS_CONF"] = "config.ini"
-    app = QGuiApplication(sys.argv)
+    app = QApplication(sys.argv)
 
     view = QQuickView()
     view.setSource(QUrl("main.qml"))
-    view.setTitle("Lagrange Points")
-    view.setIcon(QIcon("assets/appicon.png"))
+    view.setTitle("Lagrange Points Visualizer")
+    view.setIcon(QIcon("assets/app_icon_small.png"))
     view.setWidth(1280)
     view.setHeight(720)
     view.show()

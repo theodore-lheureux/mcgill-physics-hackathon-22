@@ -116,7 +116,7 @@ Rectangle {
 				id: field_speed
 				text: "Simulation speed"
 				min: 1
-				max: 10
+				max: 100
 				initial: 1
 			}
 
@@ -176,6 +176,30 @@ Rectangle {
 			// 	max: 100
 			// 	initial: 50
 			// }
+
+			Row {
+				RoundButton {
+					id: aboutBtn
+
+					icon.source: "assets/about_icon.png"
+					onClicked: aboutMenu.popup()
+
+					Menu {
+						id: aboutMenu
+
+						Action {
+							text: "About"
+							icon.source: "assets/app_icon.png"
+							onTriggered: base.about()
+						}
+						Action {
+							text: "About Qt"
+							icon.source: "assets/about_icon.png"
+							onTriggered: base.aboutQt()
+						}
+					}
+				}
+			}
 		}
 
 		state: "closed"
@@ -213,7 +237,7 @@ Rectangle {
 		id: menu_toggle
 
 		z: 2
-		icon.source: "assets/cog_icon_mit.png"
+		icon.source: "assets/cog_icon.png"
 		anchors.left: parent.left
 		anchors.top: parent.top
 		anchors.margins: app.spacing
@@ -265,11 +289,11 @@ Rectangle {
 			Rectangle {
 				id: object1
 
-				color: "cyan"
 				width: 10
 				height: 10
 				z: 2
 				radius: 10			
+				color: "cyan"
 			}
 
 			Behavior on scale {
@@ -319,7 +343,7 @@ Rectangle {
 		horizontalAlignment: Text.AlignHCenter
 
 		Behavior on opacity {
-			NumberAnimation { duration: 5000; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 4000; easing.type: Easing.OutQuad }
 		}
 
 		Component.onCompleted: opacity = 0
