@@ -279,9 +279,15 @@ Rectangle {
 	Video {
 		id: background
 
-		z: 0
+		property float parallaxStrength: 0.05
 
-		anchors.fill: parent
+		x: (-flick.contentX - flick.width / 2) * parallaxStrength
+		y: (-flick.contentY - flick.height / 2) * parallaxStrength
+		z: 0
+		scale: 1.1
+
+		width: parent.width
+		height: parent.height
 		anchors.margins: 5
 		source: Qt.resolvedUrl("assets/video.mp4")
 		opacity: 0.3
@@ -364,12 +370,13 @@ Rectangle {
 		text: "Drag or pinch to interact"
 
 		width: app.width
-		anchors.bottom: app.bottom
-		anchors.margins: app.spacing + 15
+		anchors.top: app.top
+		anchors.margins: app.spacing + 25
 		horizontalAlignment: Text.AlignHCenter
+		font.pointSize: 30
 
 		Behavior on opacity {
-			NumberAnimation { duration: 4000; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 3000; easing.type: Easing.OutQuad }
 		}
 
 		Component.onCompleted: opacity = 0
@@ -382,7 +389,7 @@ Rectangle {
 		height: 40
 		anchors.right: parent.right
 		anchors.top: parent.top
-		color: "#401f66"
+		color: mousearea.containsMouse ? "#300c33" : "#401f66"
 		opacity: 0.5
 		radius: app.radius
 		anchors.margins: app.spacing
@@ -393,7 +400,10 @@ Rectangle {
 		}
 
 		MouseArea {
+			id: mousearea
+
 			anchors.fill: parent
+			hoverEnabled: true
 
 			onClicked: closeAnim.start()
 		}
