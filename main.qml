@@ -16,6 +16,7 @@ Rectangle {
 	property int spacing: 15
 
 	anchors.fill: parent
+	radius: 15
 	color: "#121212"
 
 	Base { id: base }
@@ -257,6 +258,7 @@ Rectangle {
 		z: 0
 
 		anchors.fill: parent
+		anchors.margins: 5
 		source: Qt.resolvedUrl("assets/video.mp4")
 		opacity: 0.3
 		fillMode: VideoOutput.PreserveAspectCrop
@@ -347,6 +349,30 @@ Rectangle {
 		}
 
 		Component.onCompleted: opacity = 0
+	}
+
+	Rectangle {
+		id: quitBtn
+
+		width: 60
+		height: 40
+		anchors.right: parent.right
+		anchors.top: parent.top
+		color: "#401f66"
+		opacity: 0.5
+		radius: app.radius
+		anchors.margins: app.spacing
+		
+		Label {
+			anchors.centerIn: parent
+			text: "X"
+		}
+
+		MouseArea {
+			anchors.fill: parent
+
+			onClicked: Qt.quit()
+		}
 	}
 
 	Component.onCompleted: {
