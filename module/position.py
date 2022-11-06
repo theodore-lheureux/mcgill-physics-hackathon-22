@@ -58,9 +58,8 @@ class Position(QObject):
         t = 0.1/(2*math.pi)*T
         pos_x = vx*1.1 + 1/2*Fnetx*1.1**2*10**12 + x3
         pos_y = vy*1.1 + 1/2*Fnety*1.1**2*10**12 + y3
-        print(Fnetx)
         if Fnetx > 4 or Fnety > 4:
-            return QPointF(0, 0)
+            return QPointF(100000, 100000)
         return QPointF(pos_x, pos_y)
         
     

@@ -210,7 +210,10 @@ Rectangle {
 			}
 
 			Label {
+				Layout.fillWidth: true
 				text: "Click on the canvas to set object position"
+				horizontalAlignment: Qt.AlignHCenter
+				font.pointSize: 12
 			}
 
 			Row {
@@ -305,8 +308,14 @@ Rectangle {
 			id: flickarea
 
 			anchors.fill: parent
+			
 			onWheel: (wheel) => {
 				simulation.scale += wheel.angleDelta.y * 0.002
+			}
+
+			onClicked: (mouse) => {
+				object3.x = mouse.x - object3.width * 2
+				object3.y = mouse.y - object3.height * 2
 			}
 
 			function fadeIn() {
@@ -367,9 +376,9 @@ Rectangle {
 			Rectangle {
 				id: object3
 				color: "grey"
-				width: 20
-				height: 20
-				radius: 10
+				width: 10
+				height: 10
+				radius: 5
 				x: simulation.width / 2 - width / 2
 				y: simulation.height / 2 - height / 2
 			}
