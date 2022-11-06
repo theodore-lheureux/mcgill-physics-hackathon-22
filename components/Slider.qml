@@ -21,6 +21,7 @@ RowLayout {
 		from: parent.min
 		to: parent.max
 		value: parent.initial
+		stepSize: 0.1
 
 		Layout.alignment: Qt.AlignCenter		
 	}

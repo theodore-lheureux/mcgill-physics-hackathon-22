@@ -39,20 +39,20 @@ class Position(QObject):
         vx = v * math.cos(v_ang)
         vy = v* math.cos(v_ang)
         # Assuming F = ma where m = 1
-        m = M1/100000
+        # m = M1/100000
         G = 6.67*(10**-11)
         dist_m1 = math.sqrt((y3-y1)**2+(x3-x1)**2)
         dist_m2 = math.sqrt((y3-y2)**2+(x3-x2)**2) 
         ang1 = math.atan((y3-y1)/(x3-x1))
         ang2 = math.atan((y3-y2)/(x3-x2))
-        Fm1 = (G*M1*m)/(dist_m1**2)
-        Fm2 = (G*M2*m)/(dist_m2**2)
+        Fm1 = (G*M1)/(dist_m1**2)
+        Fm2 = (G*M2)/(dist_m2**2)
         Fnetx = Fm1*math.cos(ang1) + Fm2*math.cos(ang2)
         Fnety = Fm1*math.sin(ang1) + Fm2*math.sin(ang2)
         t = 0.1/(2*math.pi)*T
-        pos_x = vx*t - (1/2*((Fnetx*t/m)**2))/1000
-        pos_y = vy*t - (1/2*((Fnety*t/m)**2))/1000
-        print("asddsadsa", (pos_x, pos_y))
+        pos_x = vx + x3
+        pos_y = vy + y3
+        print("asddsadsa", (pos_x, 1/2*((Fnetx*t)**2)))
 
         # if velocity <61:
         #     pastposx = pos_x

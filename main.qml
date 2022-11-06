@@ -59,8 +59,8 @@ Rectangle {
 		property double m2: field_m2.value  
 		property double r: field_r.value 
 		property double speed: 1
-		// property double v: field_v.value
-		// property double v_ang: field_v_ang.value
+		property double v: field_v.value
+		property double v_ang: field_v_ang.value
 
 		property double x3: 500
 		property double y3: 500
@@ -87,9 +87,9 @@ Rectangle {
 			lagrange_points.model = pos_lagrange
 
 			// // Place Object 3
-			// let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
-			// object3.x = posM3.x
-			// object3.y = posM3.y 
+			let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
+			object3.x = posM3.x
+			object3.y = posM3.y 
 
 			angle += 0.005 * field_speed.value
 		}
@@ -129,7 +129,7 @@ Rectangle {
 			anchors.leftMargin: 40
 		}
 
-		Column {
+		ColumnLayout {
 			id: layout
 
 			anchors.top: heading.bottom
@@ -170,22 +170,23 @@ Rectangle {
 				initial: 70
 			}
 
-			// BROKEN
-			// Components.Slider {
-			// 	id: field_v
-			// 	text: "Velocity of 3rd object"
-			// 	min: -2 * Math.PI
-			// 	max: 2 * Math.PI
-			// 	initial: 0
-			// }
+			ToolSeparator { Layout.fillWidth: true; orientation: Qt.Horizontal }
 
-			// Components.Slider {
-			// 	id: field_v_ang
-			// 	text: "Angle of velocity"
-			// 	min: 0
-			// 	max: 100
-			// 	initial: 50
-			// }
+			Components.Slider {
+				id: field_v
+				text: "Velocity of 3rd object"
+				min: -0.5
+				max: 0.5
+				initial: 0
+			}
+
+			Components.Slider {
+				id: field_v_ang
+				text: "Angle of velocity"
+				min: 0
+				max: 2 * Math.PI
+				initial: Math.PI
+			}
 
 			// Components.Slider {
 			// 	id: field_x3
@@ -259,49 +260,6 @@ Rectangle {
 		}
 	}
 
-	RoundButton {
-		id: menu_toggle
-
-		z: 2
-		icon.source: "assets/cog_icon.png"
-		anchors.left: parent.left
-		anchors.top: parent.top
-		anchors.margins: app.spacing
-		
-		onClicked: {
-			if (menu.state == "open") {
-				menu.state = "closed"
-			} else {
-				menu.state = "open"
-			}
-		}
-	}
-
-	RoundButton {
-		id: resize_toggle
-
-		z: 2
-		anchors.right: parent.right
-		anchors.bottom: parent.bottom
-		text: "R"
-
-		onPressed: {
-			Window.window.startSystemResize(Qt.BottomEdge | Qt.RightEdge)
-		}
-	}
-
-	MouseArea {
-		id: invisible_titlebar
-
-		z: 1
-		anchors.top: parent.top
-		width: parent.width
-		height: 50
-		acceptedButtons: Qt.LeftButton
-		onPressed: Window.window.startSystemMove()
-		
-	}
-
 	Video {
 		id: background
 
@@ -339,6 +297,12 @@ Rectangle {
 			onWheel: (wheel) => {
 				simulation.scale += wheel.angleDelta.y * 0.002
 			}
+
+			onPositionChanged: {
+				simulation.opacity = 1
+				prompt1.opacity = 0
+				prompt2.opacity = 0
+			}
 		}
 
 		Rectangle {
@@ -350,7 +314,7 @@ Rectangle {
 			opacity: 0
 
 			Behavior on opacity {
-				NumberAnimation { duration: 7000; easing.type: Easing.OutQuad }
+				NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
 			}
 
 			Rectangle {
@@ -386,7 +350,7 @@ Rectangle {
 				height: 20
 				radius: 10
 				x: simulation.width / 2 - width / 2
-				y: + simulation.height / 2 - height / 2
+				y: simulation.height / 2 - height / 2
 			}
 
 			Repeater {
@@ -397,13 +361,11 @@ Rectangle {
 					y: modelData.y + simulation.height / 2 - height / 2
 				}
 			}
-
-			Component.onCompleted: simulation.opacity = 1
 		}
 	}
 
 	Label {
-		id: prompt
+		id: prompt1
 		text: "Drag or pinch to interact"
 
 		width: app.width
@@ -412,10 +374,8 @@ Rectangle {
 		font.pointSize: 30
 
 		Behavior on opacity {
-			NumberAnimation { duration: 3000; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
 		}
-
-		Component.onCompleted: opacity = 0
 	}
 
 	Label {
@@ -429,10 +389,37 @@ Rectangle {
 		font.pointSize: 20
 
 		Behavior on opacity {
-			NumberAnimation { duration: 3000; easing.type: Easing.OutQuad }
+			NumberAnimation { duration: 500; easing.type: Easing.OutQuad }
 		}
+	}
 
-		Component.onCompleted: opacity = 0
+	MouseArea {
+		id: invisible_titlebar
+
+		z: 1
+		anchors.top: parent.top
+		width: parent.width
+		height: 50
+		acceptedButtons: Qt.LeftButton
+		onPressed: Window.window.startSystemMove()	
+	}
+
+	RoundButton {
+		id: menu_toggle
+
+		z: 2
+		icon.source: "assets/cog_icon.png"
+		anchors.left: parent.left
+		anchors.top: parent.top
+		anchors.margins: app.spacing
+		
+		onClicked: {
+			if (menu.state == "open") {
+				menu.state = "closed"
+			} else {
+				menu.state = "open"
+			}
+		}
 	}
 
 	Label {
@@ -443,15 +430,31 @@ Rectangle {
 		anchors.left: app.left
 		anchors.bottom: app.bottom
 		anchors.margins: app.spacing
+		opacity: 0.7
 		font.pointSize: 14
 	}
 
+	RoundButton {
+		id: resize_toggle
+
+		z: 2
+		anchors.right: parent.right
+		anchors.bottom: parent.bottom
+		anchors.margins: app.spacing
+		icon.source: "assets/resize_icon.png"
+		opacity: 0.5
+
+		onPressed: {
+			Window.window.startSystemResize(Qt.BottomEdge | Qt.RightEdge)
+		}
+	}
 
 	Rectangle {
 		id: quitBtn
 
 		width: 60
 		height: 40
+		z: 3
 		anchors.right: parent.right
 		anchors.top: parent.top
 		color: mousearea.containsMouse ? "#300c33" : "#401f66"
