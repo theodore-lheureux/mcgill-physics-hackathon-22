@@ -1,5 +1,12 @@
 <h1>McGill Physics Hackathon 2022: Lagrange Points Visualizer</h1>
 
+## Authors
+- [Eric Deng](https://github.com/Lawnless1)
+- [Maxime Gagnon](https://github.com/Thurinum)
+- [Kenneth Chen](https://github.com/)
+- [David Vo](https://github.com/)
+- [Theodore l'Heureux](https://duckduckgo.com)
+
 <h2>Features highlights</h2>
 
 <ul>
@@ -125,13 +132,6 @@ pip install pyqt6
 pip install pyside6
 python main.py
 ```
-
-## Authors
-- Eric Deng
-- Theodore l'Heureux
-- Maxime Gagnon
-- Kenneth Chen
-- David Vo
 
 ## Credits
 - Uses Qt Quick with PySide6 bindings for Python
