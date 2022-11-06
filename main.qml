@@ -11,6 +11,10 @@ import com.hackathon.position
 import "./components" as Components
 
 Rectangle {
+	id: app
+
+	property int spacing: 15
+
 	anchors.fill: parent
 	color: "#121212"
 
@@ -67,26 +71,23 @@ Rectangle {
 	
 	Pane {
 		id: menu
-		
-		property int margin: 15
 
-		z: 1
-		clip: true
-		width: layout.implicitWidth + margin * 4
-		height: heading.implicitHeight + layout.implicitHeight + margin * 4
+		property double w: layout.implicitWidth + app.spacing * 4
+		property double h: heading.implicitHeight + layout.implicitHeight + app.spacing * 4
+		
 		anchors.left: parent.left
 		anchors.top: parent.top
-		anchors.margins: margin
-
-		property int radius: 15
-		Material.elevation: 100
+		anchors.margins: app.spacing
+		clip: true
+		z: 1
+		
 		background: Rectangle {
 			color: menu.Material.backgroundColor
-			radius: menu.Material.elevation > 0 ? menu.radius : 0
+			radius: 15
 
 			layer.enabled: menu.enabled && menu.Material.elevation > 0
 			layer.effect: ElevationEffect {
-				elevation: menu.Material.elevation
+				elevation: 10
 			}
 		}	
 
@@ -98,9 +99,10 @@ Rectangle {
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.right: parent.right
-			anchors.margins: menu.margin
-			anchors.leftMargin: 40 // dirty hack
+			anchors.margins: app.spacing
+			anchors.leftMargin: 40
 		}
+
 		Column {
 			id: layout
 
@@ -108,7 +110,7 @@ Rectangle {
 			anchors.left: parent.left
 			anchors.right: parent.right
 			anchors.bottom: parent.bottom
-			anchors.margins: menu.margin
+			anchors.margins: app.spacing
 			
 			Components.Slider {
 				id: field_speed
@@ -182,8 +184,8 @@ Rectangle {
 				name: "open"
 				PropertyChanges {
 					target: menu
-					width: layout.implicitWidth + margin * 4
-					height: heading.implicitHeight + layout.implicitHeight + margin * 4
+					width: menu.w
+					height: menu.h
 					opacity: 1
 				}
 			},
@@ -201,19 +203,20 @@ Rectangle {
 		transitions: Transition {
 			NumberAnimation {
 				properties: "width, height, opacity"
-				duration: 200
-				easing.type: Easing.InOutQuad
+				duration: 500
+				easing.type: Easing.InOutBack
 			}
 		}
 	}
 
 	RoundButton {
 		id: menu_toggle
+
 		z: 2
 		icon.source: "assets/cog_icon_mit.png"
 		anchors.left: parent.left
 		anchors.top: parent.top
-		anchors.margins: menu.margin
+		anchors.margins: app.spacing
 		
 		onClicked: {
 			if (menu.state == "open") {
@@ -304,6 +307,22 @@ Rectangle {
 				}
 			}
 		}
+	}
+
+	Label {
+		id: prompt
+		text: "Drag or pinch to interact"
+
+		width: app.width
+		anchors.bottom: app.bottom
+		anchors.margins: app.spacing + 15
+		horizontalAlignment: Text.AlignHCenter
+
+		Behavior on opacity {
+			NumberAnimation { duration: 5000; easing.type: Easing.OutQuad }
+		}
+
+		Component.onCompleted: opacity = 0
 	}
 
 	Component.onCompleted: {
