@@ -37,7 +37,7 @@ class Position(QObject):
     @Slot(float, float, float, float, float, float, float, float, float, float, float, result=QPointF)
     def pos_object3(self, M1, M2, x1, y1, x2, y2, x3, y3, v, v_ang, T):
         vx = v * math.cos(v_ang)
-        vy = v* math.cos(v_ang)
+        vy = v* math.sin(v_ang)
         # Assuming F = ma where m = 1
         # m = M1/100000
         G = 6.67*(10**-11)
@@ -58,8 +58,9 @@ class Position(QObject):
         t = 0.1/(2*math.pi)*T
         pos_x = vx*1.1 + 1/2*Fnetx*1.1**2*10**12 + x3
         pos_y = vy*1.1 + 1/2*Fnety*1.1**2*10**12 + y3
-        if Fnetx > 4 or Fnety > 4:
-            return QPointF(100000, 100000)
+        print(Fm1x)
+        if 1/2*Fnetx*1.1**2*10**12 > 3 or 1/2*Fnetx*1.1**2*10**12 < -3 or 1/2*Fnety*1.1**2*10**12 < -3 or 1/2*Fnety*1.1**2*10**12 > 3:
+            return QPointF()
         return QPointF(pos_x, pos_y)
         
     

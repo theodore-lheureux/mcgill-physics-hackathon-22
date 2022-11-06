@@ -87,14 +87,19 @@ Rectangle {
 			let pos_lagrange = position.pos_lagrange(lagrange_dist[0], lagrange_dist[1], lagrange_dist[2], posM2.x, posM2.y, barycenter.x, r, angle)
 			lagrange_points.model = pos_lagrange
 
-			// // Place Object 3
+			// Place Object 3
 			let posM3 = position.pos_object3(m1, m2, object1.x, object1.y, object2.x, object2.y, object3.x, object3.y, v, v_ang, t)
-			object3.x = posM3.x
-			object3.y = posM3.y 
 
+			object3.visible = true
 
-			//series.append(posM3.x, posM3.y)
+			console.log(posM3)
 
+			if (posM3) {
+				object3.x = posM3.x
+				object3.y = posM3.y
+			} else {
+				object3.visible = false
+			}
 
 			angle += 0.005 * field_speed.value
 		}
@@ -157,7 +162,7 @@ Rectangle {
 				text: "Mass of 1st object"
 				min: 50
 				max: 300
-				initial: 31
+				initial: 100
 				unit: "kg"
 			}
 
@@ -201,7 +206,7 @@ Rectangle {
 					id: field_v_ang
 
 					from: 0
-					to: 2 * Math.PI
+					to: 2 * Math.PI + (Math.PI)
 					value: 0
 					stepSize: 0.1
 					snapMode: Dial.SnapAlways	
@@ -211,7 +216,7 @@ Rectangle {
 
 			Label {
 				Layout.fillWidth: true
-				text: "Click on the canvas to set object position"
+				text: "Click on canvas to set object position"
 				horizontalAlignment: Qt.AlignHCenter
 				font.pointSize: 12
 			}
@@ -411,7 +416,7 @@ Rectangle {
 
 	Label {
 		id: prompt2
-		text: "Drag here to move"
+		text: "Click anywhere to place a third body"
 
 		width: app.width
 		anchors.top: app.top
