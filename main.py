@@ -1,5 +1,5 @@
 import sys, os
-import module.base
+import module.base 
 import module.position
 
 from PySide6.QtCore import Qt, QUrl, QSize
@@ -20,7 +20,7 @@ def main():
     view.setMinimumSize(QSize(1280, 720))
     view.setColor(Qt.transparent)
     view.setModality(Qt.WindowModal)
-    view.setFlags(Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.Window | Qt.WindowStaysOnTopHint)
+    view.setFlags(Qt.FramelessWindowHint | Qt.CustomizeWindowHint | Qt.Window)
     view.engine().quit.connect(app.quit)
     view.show()
 

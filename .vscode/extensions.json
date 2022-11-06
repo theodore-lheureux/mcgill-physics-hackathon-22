@@ -1,6 +1,5 @@
 {
 	"recommendations": [
-		"seanwu.vscode-qt-for-python",
-		"avoonix.furry-language"
+		"seanwu.vscode-qt-for-python"
 	]
 }
