@@ -2,7 +2,7 @@
 
 A visualizer for Lagrange points, a physical phenomenon, made as a team project for the 2022 McGill Physics Hackathon. See the [video demo](https://www.youtube.com/watch?v=nInSFXwB9PQ).
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/nInSFXwB9PQ)](https://www.youtube.com/watch?v=nInSFXwB9PQ)
+[![Video preview](https://img.youtube.com/vi/nInSFXwB9PQ/0.jpg)](https://www.youtube.com/watch?v=nInSFXwB9PQ)
 
 ## Authors
 - [Eric Deng](https://github.com/Lawnless1)
